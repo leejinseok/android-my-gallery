@@ -8,7 +8,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -20,13 +23,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import coil.compose.rememberAsyncImagePainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var granted = remember {
+            val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+            val granted = remember {
                 mutableStateOf(false)
             }
 
@@ -57,8 +65,8 @@ class MainActivity : ComponentActivity() {
             }
 
             if (granted.value) {
-
-
+                mainViewModel.getPhotos()
+                HomeScreen(photoUris = mainViewModel.photoUris.value)
             } else {
                 val requestPermission =
                     if (isAndroidVersionBeforeTiramisu) android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -89,11 +97,26 @@ fun PermissionRequestScreen(onClickPermissionRequestButton: () -> Unit) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(photoUris: List<Uri>) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        HorizontalPager(pageCount = 3, modifier = Modifier.weight(1f)) { pageIndex ->
-            Card {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        HorizontalPager(
+            pageCount = photoUris.size,
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Black),
+        ) { pageIndex ->
 
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Card(
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(model = photoUris[pageIndex]),
+                        contentDescription = null,
+                    )
+                }
             }
+
         }
     }
 }
