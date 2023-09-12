@@ -17,17 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyGallery"
         tools:targetApi="31">
-        <activityㄱ
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyGallery">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activityㄱ>
+        </activity>
     </application>
 
 </manifest>

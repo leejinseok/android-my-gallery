@@ -60,14 +60,12 @@ class MainActivity : ComponentActivity() {
 
 
             } else {
-                if (isAndroidVersionBeforeTiramisu) {
-                    PermissionRequestScreen {
-                        launcher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    }
-                } else {
-                    PermissionRequestScreen {
-                        launcher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-                    }
+                val requestPermission =
+                    if (isAndroidVersionBeforeTiramisu) android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    else android.Manifest.permission.READ_MEDIA_IMAGES
+
+                PermissionRequestScreen {
+                    launcher.launch(requestPermission)
                 }
             }
         }
